@@ -37,12 +37,21 @@ export default function CustomerPortalForm({ subscription }: Props) {
       minimumFractionDigits: 0
     }).format((subscription?.prices?.unit_amount || 0) / 100);
 
-  const handleStripePortalRequest = async () => {
-    setIsSubmitting(true);
-    const redirectUrl = await createStripePortal(currentPath);
-    setIsSubmitting(false);
-    return router.push(redirectUrl);
-  };
+    const [error, setError] = useState<string | null>(null);
+    
+    const handleStripePortalRequest = async () => {
+      setIsSubmitting(true);
+      setError(null);
+      try {
+        const redirectUrl = await createStripePortal(currentPath);
+        router.push(redirectUrl);
+      } catch (err) {
+        console.error('Error creating Stripe portal:', err);
+        setError('Could not create billing portal. Please try again later or contact support.');
+      } finally {
+        setIsSubmitting(false);
+      }
+    };
 
   return (
     <Card
