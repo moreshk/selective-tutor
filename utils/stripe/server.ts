@@ -119,7 +119,12 @@ export async function checkoutWithStripe(
   }
 }
 
-export async function createStripePortal(currentPath: string) {
+type StripePortalResponse = {
+  url?: string;
+  error?: string;
+};
+
+export async function createStripePortal(currentPath: string): Promise<StripePortalResponse> {
   try {
     const supabase = createClient();
     const {
@@ -149,33 +154,21 @@ export async function createStripePortal(currentPath: string) {
       throw new Error('Could not get customer.');
     }
 
-    try {
-      const { url } = await stripe.billingPortal.sessions.create({
-        customer,
-        return_url: getURL('/account')
-      });
-      if (!url) {
-        throw new Error('Could not create billing portal');
-      }
-      return url;
-    } catch (err) {
-      console.error(err);
+    const { url } = await stripe.billingPortal.sessions.create({
+      customer,
+      return_url: getURL('/account')
+    });
+
+    if (!url) {
       throw new Error('Could not create billing portal');
     }
+
+    return { url };
   } catch (error) {
-    if (error instanceof Error) {
-      console.error(error);
-      return getErrorRedirect(
-        currentPath,
-        error.message,
-        'Please try again later or contact a system administrator.'
-      );
-    } else {
-      return getErrorRedirect(
-        currentPath,
-        'An unknown error occurred.',
-        'Please try again later or contact a system administrator.'
-      );
-    }
+    console.error(error);
+    const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred.';
+    return {
+      error: `Could not create billing portal. ${errorMessage}`
+    };
   }
 }
