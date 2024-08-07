@@ -33,6 +33,8 @@ interface Props {
 type BillingInterval = 'lifetime' | 'year' | 'month';
 
 export default function Pricing({ user, products, subscription }: Props) {
+  console.log('Pricing component received products:', products);
+
   const intervals = Array.from(
     new Set(
       products.flatMap((product) =>
@@ -40,6 +42,8 @@ export default function Pricing({ user, products, subscription }: Props) {
       )
     )
   );
+  console.log('Available intervals:', intervals);
+
   const router = useRouter();
   const [billingInterval, setBillingInterval] =
     useState<BillingInterval>('month');
