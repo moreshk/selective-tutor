@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { ArrowRight, BookOpen, Target, BarChart } from 'lucide-react';
+import { ArrowRight, BookOpen, Target, BarChart, Star } from 'lucide-react';
 import { Line, Bar } from 'react-chartjs-2';
 import { 
   Chart as ChartJS, 
@@ -87,6 +87,7 @@ const StudentProgressChart = () => {
 
       setChartOptions({
         responsive: true,
+        maintainAspectRatio: false,
         animation: { duration: 2000, easing: 'easeOutQuart' },
         scales: {
           y: {
@@ -105,8 +106,8 @@ const StudentProgressChart = () => {
   }, [inView]);
 
   return (
-    <div ref={ref} className="bg-white p-6 rounded-lg shadow-md mb-8">
-      <div className="h-64">
+    <div ref={ref} className="bg-white p-6 rounded-lg shadow-md h-full">
+      <div className="h-64 md:h-full">
         {inView ? (
           <Line data={chartData} options={chartOptions} />
         ) : (
@@ -146,6 +147,7 @@ const StudentComparisonChart = () => {
 
       setChartOptions({
         responsive: true,
+        maintainAspectRatio: false,
         animation: { duration: 2000, easing: 'easeOutQuart' },
         scales: {
           y: {
@@ -175,8 +177,8 @@ const StudentComparisonChart = () => {
   }, [inView]);
 
   return (
-    <div ref={ref} className="bg-white p-6 rounded-lg shadow-md">
-      <div className="h-64">
+    <div ref={ref} className="bg-white p-6 rounded-lg shadow-md h-full">
+      <div className="h-64 md:h-full">
         {inView ? (
           <Bar data={chartData} options={chartOptions} />
         ) : (
@@ -184,6 +186,10 @@ const StudentComparisonChart = () => {
             <p className="text-gray-500 text-center">Chart loading...</p>
           </div>
         )}
+      </div>
+      <div className="mt-4 flex items-center justify-center">
+        <Star className="text-yellow-400 mr-2" />
+        <span className="text-sm">Your performance</span>
       </div>
     </div>
   );
@@ -273,8 +279,10 @@ const HomePage = () => {
           <h2 className="text-3xl font-semibold mb-8 text-center">
             Student Progress Tracker
           </h2>
-          <StudentProgressChart />
-          <StudentComparisonChart />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <StudentProgressChart />
+            <StudentComparisonChart />
+          </div>
         </div>
       </ParallaxSection>
 
