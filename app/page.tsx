@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { ArrowRight, BookOpen, Target, BarChart } from 'lucide-react';
-import { Line } from 'react-chartjs-2';
+import { Line, Bar } from 'react-chartjs-2';
 import { 
   Chart as ChartJS, 
   CategoryScale, 
@@ -178,7 +178,7 @@ const StudentComparisonChart = () => {
     <div ref={ref} className="bg-white p-6 rounded-lg shadow-md">
       <div className="h-64">
         {inView ? (
-          <Line data={chartData} options={chartOptions} />
+          <Bar data={chartData} options={chartOptions} />
         ) : (
           <div className="h-full flex items-center justify-center">
             <p className="text-gray-500 text-center">Chart loading...</p>
@@ -188,7 +188,6 @@ const StudentComparisonChart = () => {
     </div>
   );
 };
-
 
 const HomePage = () => {
   return (
