@@ -5,6 +5,8 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { ArrowRight, BookOpen, Target, BarChart, Star } from 'lucide-react';
 import { Line, Bar } from 'react-chartjs-2';
+import TopicsCovered from '../components/TopicsCovered';
+
 import { 
   Chart as ChartJS, 
   CategoryScale, 
@@ -128,6 +130,7 @@ const HomePage = () => {
           </div>
         </div>
       </ParallaxSection>
+      <TopicsCovered />
 
       <ParallaxSection bgClass="bg-gradient-to-r from-indigo-100 to-purple-100">
         <div className="container mx-auto px-4 text-center">
