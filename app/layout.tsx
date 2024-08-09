@@ -6,8 +6,8 @@ import { PropsWithChildren, Suspense } from 'react';
 import { getURL } from '@/utils/helpers';
 import 'styles/main.css';
 
-const title = 'Next.js Subscription Starter';
-const description = 'Brought to you by Vercel, Stripe, and Supabase.';
+const title = 'Select Prep - Selective School Exam Preparation';
+const description = 'Comprehensive preparation for selective school exams, covering Written Expression, Numerical Reasoning, Verbal Reasoning, and more.';
 
 export const metadata: Metadata = {
   metadataBase: new URL(getURL()),
@@ -15,8 +15,21 @@ export const metadata: Metadata = {
   description: description,
   openGraph: {
     title: title,
-    description: description
-  }
+    description: description,
+    images: [
+      {
+        url: '/light-logo.png',
+        width: 800,
+        height: 600,
+        alt: 'Select Prep Logo',
+      },
+    ],
+  },
+  icons: {
+    icon: '/light-logo.png',
+    shortcut: '/logo.png',
+    apple: '/light-logo.png',
+  },
 };
 
 export default async function RootLayout({ children }: PropsWithChildren) {
