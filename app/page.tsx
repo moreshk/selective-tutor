@@ -149,9 +149,13 @@ const HomePage = () => {
 
       <ParallaxSection bgClass="bg-white">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-semibold mb-8 text-center">
-            Student Progress Tracker
+          <h2 className="text-3xl font-semibold mb-4 text-center">
+            Comprehensive Performance Analytics
           </h2>
+          <p className="text-lg text-center mb-8 max-w-3xl mx-auto">
+            We provide detailed drilldown reports of your student's performance in specific areas over time, 
+            along with insights into how your child is tracking compared to their peers.
+          </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <StudentProgressChart />
             <StudentComparisonChart />
