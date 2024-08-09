@@ -27,7 +27,7 @@ export default function Navlinks({ user }: NavlinksProps) {
             className="object-contain"
           />
         </Link>
-        <nav className="ml-6 space-x-2 lg:block">
+        {/* <nav className="ml-6 space-x-2 lg:block">
           <Link href="/" className={s.link}>
             Pricing
           </Link>
@@ -36,7 +36,7 @@ export default function Navlinks({ user }: NavlinksProps) {
               Account
             </Link>
           )}
-        </nav>
+        </nav> */}
       </div>
       <div className="flex justify-end space-x-8">
         {user ? (
