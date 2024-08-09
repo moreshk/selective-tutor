@@ -7,7 +7,7 @@ export default function Footer() {
         <p>
           &copy; {new Date().getFullYear()} Select Prep. All rights reserved.
         </p>
-        <p className="mt-2">Made with ❤️ in Melbourne</p>
+        <p className="mt-2">Made with ❤️ in Melbourne, Australia</p>
         <p className="mt-1">Burnside Heights, VIC</p>
       </div>
     </footer>

@@ -1,5 +1,6 @@
 'use client';
-
+import StudentProgressChart from '../components/StudentProgressChart';
+import StudentComparisonChart from '@/components/StudentComparisonChart';
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { ArrowRight, BookOpen, Target, BarChart, Star } from 'lucide-react';
@@ -61,135 +62,8 @@ const ProcessStep = ({
   </div>
 );
 
-const StudentProgressChart = () => {
-  const [chartData, setChartData] = useState<ChartData<'line'>>({
-    labels: [],
-    datasets: []
-  });
-  const [chartOptions, setChartOptions] = useState<ChartOptions<'line'>>({});
-  const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
 
-  useEffect(() => {
-    if (inView) {
-      const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-      const studentScores = [65, 68, 64, 70, 72, 75, 73, 78, 80, 82, 85, 88];
 
-      setChartData({
-        labels,
-        datasets: [{
-          label: 'Your Progress',
-          data: studentScores,
-          borderColor: 'rgb(75, 192, 192)',
-          tension: 0.1,
-          fill: false,
-        }],
-      });
-
-      setChartOptions({
-        responsive: true,
-        maintainAspectRatio: false,
-        animation: { duration: 2000, easing: 'easeOutQuart' },
-        scales: {
-          y: {
-            beginAtZero: true,
-            max: 100,
-            title: { display: true, text: 'Score' },
-          },
-          x: { title: { display: true, text: 'Month' } },
-        },
-        plugins: {
-          legend: { position: 'top' as const },
-          title: { display: true, text: 'Your Progress Over Time' },
-        },
-      });
-    }
-  }, [inView]);
-
-  return (
-    <div ref={ref} className="bg-white p-6 rounded-lg shadow-md h-80">
-      <div className="h-full">
-        {inView ? (
-          <Line data={chartData} options={chartOptions} />
-        ) : (
-          <div className="h-full flex items-center justify-center">
-            <p className="text-gray-500 text-center">Chart loading...</p>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-};
-
-const StudentComparisonChart = () => {
-  const [chartData, setChartData] = useState<ChartData<'bar'>>({
-    labels: [],
-    datasets: []
-  });
-  const [chartOptions, setChartOptions] = useState<ChartOptions<'bar'>>({});
-  const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
-
-  useEffect(() => {
-    if (inView) {
-      const labels = ['0-10', '11-20', '21-30', '31-40', '41-50', '51-60', '61-70', '71-80', '81-90', '91-100'];
-      const distributionData = [2, 5, 10, 15, 20, 25, 15, 5, 2, 1];
-      const studentScore = 78; // Example student score
-
-      setChartData({
-        labels,
-        datasets: [{
-          label: 'Score Distribution',
-          data: distributionData,
-          backgroundColor: 'rgba(0, 0, 128, 0.6)',
-          borderColor: 'rgba(0, 0, 128, 1)',
-          borderWidth: 1,
-        }],
-      });
-
-      setChartOptions({
-        responsive: true,
-        maintainAspectRatio: false,
-        animation: { duration: 2000, easing: 'easeOutQuart' },
-        scales: {
-          y: {
-            beginAtZero: true,
-            title: { display: true, text: 'Number of Students' },
-          },
-          x: { title: { display: true, text: 'Score Range' } },
-        },
-        plugins: {
-          legend: { display: false },
-          title: { display: true, text: 'Your Performance Compared to Other Students' },
-          tooltip: {
-            callbacks: {
-              afterBody: (context: any) => {
-                const rangeStart = parseInt(context[0].label.split('-')[0]);
-                const rangeEnd = parseInt(context[0].label.split('-')[1]);
-                if (studentScore >= rangeStart && studentScore <= rangeEnd) {
-                  return `Your score: ${studentScore}`;
-                }
-                return '';
-              },
-            },
-          },
-        },
-      });
-    }
-  }, [inView]);
-
-  return (
-    <div ref={ref} className="bg-white p-6 rounded-lg shadow-md h-80">
-      <div className="h-full">
-        {inView ? (
-          <Bar data={chartData} options={chartOptions} />
-        ) : (
-          <div className="h-full flex items-center justify-center">
-            <p className="text-gray-500 text-center">Chart loading...</p>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-};
 
 const HomePage = () => {
   return (
@@ -261,7 +135,7 @@ const HomePage = () => {
           <ul className="text-lg mb-8">
             <li className="mb-2">✓ Personalized learning experience</li>
             <li className="mb-2">
-              ✓ Focus on Selective Schools, Melbourne High, and SEAL programs
+              ✓ Focus on Selective School, SEAL, Scholarship programs
             </li>
             <li className="mb-2">✓ Regular progress tracking and reporting</li>
             <li>✓ Affordable compared to traditional tutoring</li>
