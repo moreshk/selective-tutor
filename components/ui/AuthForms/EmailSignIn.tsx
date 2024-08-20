@@ -47,14 +47,13 @@ export default function EmailSignIn({
               autoCapitalize="none"
               autoComplete="email"
               autoCorrect="off"
-              className="w-full p-3 rounded-md bg-blue-800 text-white placeholder-blue-200"
+              className="w-full p-3 rounded-md bg-blue-50 text-blue-600 placeholder-blue-300 border-none"
             />
           </div>
           <Button
             variant="slim"
             type="submit"
             className="mt-1"
-            customClasses="bg-blue-900 text-white hover:bg-blue-900"
             loading={isSubmitting}
             disabled={disableButton}
           >
