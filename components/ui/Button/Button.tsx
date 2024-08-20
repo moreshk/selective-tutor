@@ -14,6 +14,7 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
   width?: number;
   loading?: boolean;
   Component?: React.ComponentType;
+  customClasses?: string; // Add this line
 }
 
 const Button = forwardRef<HTMLButtonElement, Props>((props, buttonRef) => {
@@ -27,6 +28,7 @@ const Button = forwardRef<HTMLButtonElement, Props>((props, buttonRef) => {
     disabled = false,
     style = {},
     Component = 'button',
+    customClasses = '', // Add this line
     ...rest
   } = props;
   const ref = useRef(null);
@@ -37,8 +39,10 @@ const Button = forwardRef<HTMLButtonElement, Props>((props, buttonRef) => {
       [styles.loading]: loading,
       [styles.disabled]: disabled
     },
-    className
+    className,
+    customClasses // Add this line
   );
+  
   return (
     <Component
       aria-pressed={active}

@@ -7,7 +7,6 @@ import { handleRequest } from '@/utils/auth-helpers/client';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
-// Define prop type with allowPassword boolean
 interface EmailSignInProps {
   allowPassword: boolean;
   redirectMethod: string;
@@ -23,13 +22,13 @@ export default function EmailSignIn({
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    setIsSubmitting(true); // Disable the button while the request is being handled
+    setIsSubmitting(true);
     await handleRequest(e, signInWithEmail, router);
     setIsSubmitting(false);
   };
 
   return (
-    <div className="my-8">
+    <div className="my-8 bg-white text-blue-600">
       <form
         noValidate={true}
         className="mb-4"
@@ -37,7 +36,9 @@ export default function EmailSignIn({
       >
         <div className="grid gap-2">
           <div className="grid gap-1">
-            <label htmlFor="email">Email</label>
+            <label htmlFor="email" className="text-blue-600">
+              Email
+            </label>
             <input
               id="email"
               placeholder="name@example.com"
@@ -46,13 +47,14 @@ export default function EmailSignIn({
               autoCapitalize="none"
               autoComplete="email"
               autoCorrect="off"
-              className="w-full p-3 rounded-md bg-zinc-800"
+              className="w-full p-3 rounded-md bg-blue-800 text-white placeholder-blue-200"
             />
           </div>
           <Button
             variant="slim"
             type="submit"
             className="mt-1"
+            customClasses="bg-blue-900 text-white hover:bg-blue-900"
             loading={isSubmitting}
             disabled={disableButton}
           >
@@ -63,12 +65,18 @@ export default function EmailSignIn({
       {allowPassword && (
         <>
           <p>
-            <Link href="/signin/password_signin" className="font-light text-sm">
+            <Link
+              href="/signin/password_signin"
+              className="font-light text-sm text-blue-600 hover:text-blue-800"
+            >
               Sign in with email and password
             </Link>
           </p>
           <p>
-            <Link href="/signin/signup" className="font-light text-sm">
+            <Link
+              href="/signin/signup"
+              className="font-light text-sm text-blue-600 hover:text-blue-800"
+            >
               Don't have an account? Sign up
             </Link>
           </p>
