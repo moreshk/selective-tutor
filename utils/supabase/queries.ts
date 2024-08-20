@@ -31,9 +31,11 @@ export const getProducts = cache(async (supabase: SupabaseClient) => {
 });
 
 export const getUserDetails = cache(async (supabase: SupabaseClient) => {
+  const { data: user } = await supabase.auth.getUser();
   const { data: userDetails } = await supabase
     .from('users')
     .select('*')
+    .eq('id', user.user?.id)
     .single();
-  return userDetails;
+  return { ...userDetails, ...user.user?.user_metadata };
 });
