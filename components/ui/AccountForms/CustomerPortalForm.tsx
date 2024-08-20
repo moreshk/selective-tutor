@@ -23,7 +23,6 @@ type SubscriptionWithPriceAndProduct = Subscription & {
 interface Props {
   subscription: SubscriptionWithPriceAndProduct | null;
 }
-
 export default function CustomerPortalForm({ subscription }: Props) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -53,7 +52,9 @@ export default function CustomerPortalForm({ subscription }: Props) {
       }
     } catch (err) {
       console.error('Error creating Stripe portal:', err);
-      setError('Could not create billing portal. Please try again later or contact support.');
+      setError(
+        'Could not create billing portal. Please try again later or contact support.'
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -61,33 +62,34 @@ export default function CustomerPortalForm({ subscription }: Props) {
 
   return (
     <Card
-      title="Your Plan"
-      description={
-        subscription
-          ? `You are currently on the ${subscription?.prices?.products?.name} plan.`
-          : 'You are not currently subscribed to any plan.'
-      }
-      footer={
-        <div className="flex flex-col items-start justify-between sm:flex-row sm:items-center">
-          <p className="pb-4 sm:pb-0">Manage your subscription on Stripe.</p>
-          <Button
-            variant="slim"
-            onClick={handleStripePortalRequest}
-            loading={isSubmitting}
-          >
-            Open customer portal
-          </Button>
-        </div>
-      }
-    >
-      {error && <p className="text-red-500 mb-4">{error}</p>}
-      <div className="mt-8 mb-4 text-xl font-semibold">
-        {subscription ? (
-          `${subscriptionPrice}/${subscription?.prices?.interval}`
-        ) : (
-          <Link href="/">Choose your plan</Link>
-        )}
-      </div>
-    </Card>
+  title="Your Plan"
+  description={
+    subscription
+      ? `You are currently on the ${subscription?.prices?.products?.name} plan.`
+      : 'You are not currently subscribed to any plan.'
+  }
+  footer={
+    <div className="flex flex-col items-start justify-between sm:flex-row sm:items-center">
+      <p className="pb-4 sm:pb-0 text-blue-700">Manage your subscription on Stripe.</p>
+      <Button
+        variant="slim"
+        onClick={handleStripePortalRequest}
+        loading={isSubmitting}
+        className="bg-blue-900 text-white hover:bg-blue-800"
+      >
+        Open customer portal
+      </Button>
+    </div>
+  }
+>
+  {error && <p className="text-red-500 mb-4">{error}</p>}
+  <div className="mt-8 mb-4 text-xl font-semibold text-blue-900">
+    {subscription ? (
+      `${subscriptionPrice}/${subscription?.prices?.interval}`
+    ) : (
+      <Link href="/" className="text-blue-600 hover:text-blue-800">Choose your plan</Link>
+    )}
+  </div>
+</Card>
   );
 }

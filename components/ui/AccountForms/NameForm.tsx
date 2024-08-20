@@ -25,34 +25,35 @@ export default function NameForm({ userName }: { userName: string }) {
 
   return (
     <Card
-      title="Your Name"
-      description="Please enter your full name, or a display name you are comfortable with."
-      footer={
-        <div className="flex flex-col items-start justify-between sm:flex-row sm:items-center">
-          <p className="pb-4 sm:pb-0">64 characters maximum</p>
-          <Button
-            variant="slim"
-            type="submit"
-            form="nameForm"
-            loading={isSubmitting}
-          >
-            Update Name
-          </Button>
-        </div>
-      }
-    >
-      <div className="mt-8 mb-4 text-xl font-semibold">
-        <form id="nameForm" onSubmit={(e) => handleSubmit(e)}>
-          <input
-            type="text"
-            name="fullName"
-            className="w-1/2 p-3 rounded-md bg-zinc-800"
-            defaultValue={userName}
-            placeholder="Your name"
-            maxLength={64}
-          />
-        </form>
-      </div>
-    </Card>
+  title="Your Name"
+  description="Please enter your full name, or a display name you are comfortable with."
+  footer={
+    <div className="flex flex-col items-start justify-between sm:flex-row sm:items-center">
+      <p className="pb-4 sm:pb-0 text-blue-700">64 characters maximum</p>
+      <Button
+        variant="slim"
+        type="submit"
+        form="nameForm"
+        loading={isSubmitting}
+        className="bg-blue-900 text-white hover:bg-blue-800"
+      >
+        Update Name
+      </Button>
+    </div>
+  }
+>
+  <div className="mt-8 mb-4 text-xl font-semibold">
+    <form id="nameForm" onSubmit={(e) => handleSubmit(e)}>
+      <input
+        type="text"
+        name="fullName"
+        className="w-full p-3 rounded-md bg-blue-100 text-blue-900"
+        defaultValue={userName}
+        placeholder="Your name"
+        maxLength={64}
+      />
+    </form>
+  </div>
+</Card>
   );
 }
