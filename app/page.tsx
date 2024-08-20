@@ -40,7 +40,7 @@ const ParallaxSection = ({
 
 const CallToAction = () => (
   <Link
-    href="/signup"
+    href="/signin/signup"
     className="inline-flex items-center px-6 py-3 text-lg font-semibold text-white bg-blue-600 rounded-full hover:bg-blue-700 transition duration-300"
   >
     Get Started

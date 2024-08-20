@@ -30,25 +30,25 @@ export default function EmailForm({
   return (
     <Card
       title="Your Email"
-      description="Please enter the email address you want to use to login."
-      footer={
-        <div className="flex flex-col items-start justify-between sm:flex-row sm:items-center">
-          <p className="pb-4 sm:pb-0 text-blue-700">
-            We will email you to verify the change.
-          </p>
-          <Button
-            variant="slim"
-            type="submit"
-            form="emailForm"
-            loading={isSubmitting}
-            className="bg-blue-900 text-white hover:bg-blue-800"
-          >
-            Update Email
-          </Button>
-        </div>
-      }
+      // description="Please enter the email address you want to use to login."
+      // footer={
+      //   <div className="flex flex-col items-start justify-between sm:flex-row sm:items-center">
+      //     <p className="pb-4 sm:pb-0 text-blue-700">
+      //       We will email you to verify the change.
+      //     </p>
+      //     <Button
+      //       variant="slim"
+      //       type="submit"
+      //       form="emailForm"
+      //       loading={isSubmitting}
+      //       className="bg-blue-900 text-white hover:bg-blue-800"
+      //     >
+      //       Update Email
+      //     </Button>
+      //   </div>
+      // }
     >
-      <div className="mt-8 mb-4 text-xl font-semibold">
+      {/* <div className="mt-8 mb-4 text-xl font-semibold">
         <form id="emailForm" onSubmit={(e) => handleSubmit(e)}>
           <input
             type="text"
@@ -59,7 +59,17 @@ export default function EmailForm({
             maxLength={64}
           />
         </form>
+      </div> */}
+      <div className="mt-8 mb-4 text-xl font-semibold">
+        <form id="emailForm" onSubmit={(e) => handleSubmit(e)}>
+          <div
+            className="w-full p-3 rounded-md bg-blue-100 text-blue-900"
+          >
+            {userEmail ?? 'No email set'}
+          </div>
+        </form>
       </div>
+
     </Card>
   );
 }
