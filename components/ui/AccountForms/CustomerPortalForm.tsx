@@ -87,7 +87,8 @@ export default function CustomerPortalForm({ subscription }: Props) {
     {subscription ? (
       `${subscriptionPrice}/${subscription?.prices?.interval}`
     ) : (
-      <Link href="/account/#pricing-plans" className="text-blue-600 hover:text-blue-800">Choose your plan</Link>
+                //<Link href="/account/#pricing-plans" className="text-blue-600 hover:text-blue-800">Choose your plan</Link>
+      <Link href="#pricing-plans" className="text-blue-600 hover:text-blue-800">Choose your plan</Link>
     )}
   </div>
 </Card>
