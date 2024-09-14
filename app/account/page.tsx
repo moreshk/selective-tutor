@@ -45,13 +45,14 @@ export default async function Account() {
         </div>
         <div className="p-4">
           <CustomerPortalForm subscription={subscription} />
-          <NameForm userName={onboarding?.student_name ?? ''} />
-          <EmailForm userEmail={user.email} />
           <Pricing
             user={user}
             products={products ?? []}
             subscription={subscription}
           />
+          <NameForm userName={onboarding?.student_name ?? ''} />
+          <EmailForm userEmail={user.email} />
+          
         </div>
       </section>
     );
