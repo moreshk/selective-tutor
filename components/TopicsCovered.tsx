@@ -18,8 +18,8 @@ const topics = [
     icon: BookOpen,
   },
   {
-    title: 'Comprehension/Abstract Reasoning',
-    description: 'Develop inferential reading skills and solve spatial reasoning problems.',
+    title: 'Comprehension',
+    description: 'Develop inferential reading skills and deduce answers from the text.',
     icon: Brain,
   },
   {
@@ -28,8 +28,8 @@ const topics = [
     icon: Sigma,
   },
   {
-    title: 'Data Interpretation',
-    description: 'Analyze and interpret various forms of data, including graphs and charts.',
+    title: 'Data Interpretation/Abstract Reasoning',
+    description: 'Analyze and interpret various forms of data, including graphs, charts and spatial reasoning.',
     icon: PieChart,
   },
 ];
