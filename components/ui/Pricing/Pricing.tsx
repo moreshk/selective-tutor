@@ -128,7 +128,7 @@ export default function Pricing({ user, products, subscription }: Props) {
             .
           </p>
         </div>
-        <LogoCloud />
+        {/* <LogoCloud /> */}
       </section>
     );
   }
