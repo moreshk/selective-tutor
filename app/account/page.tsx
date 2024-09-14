@@ -50,7 +50,7 @@ export default async function Account() {
             products={products ?? []}
             subscription={subscription}
           />
-          <NameForm userName={onboarding?.student_name ?? ''} />
+          <NameForm userName={userDetails?.full_name ?? ''} />
           <EmailForm userEmail={user.email} />
           
         </div>
