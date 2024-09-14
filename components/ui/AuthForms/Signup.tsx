@@ -19,11 +19,16 @@ export default function SignUp({ allowEmail, redirectMethod }: SignUpProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    setIsSubmitting(true); // Disable the button while the request is being handled
-    await handleRequest(e, signUp, router);
+    setIsSubmitting(true);
+    const result = await handleRequest(e, signUp, router);
     setIsSubmitting(false);
+    if (!result) {
+      // Handle error case
+    } else {
+      // Redirect to onboarding page
+      router?.push('/onboarding');
+    }
   };
-
   return (
     <div className="my-8">
       <form
