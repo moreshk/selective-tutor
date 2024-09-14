@@ -156,7 +156,7 @@ export default function Pricing({ user, products, subscription }: Props) {
             ))}
           </div>
         </div>
-        <div className="mt-12 space-y-0 sm:mt-16 flex flex-wrap justify-center gap-6 lg:max-w-4xl lg:mx-auto xl:max-w-none xl:mx-0">
+        <div className="mt-12 space-y-4 sm:mt-16 sm:space-y-0 sm:grid sm:grid-cols-2 sm:gap-6 lg:max-w-4xl lg:mx-auto xl:max-w-none xl:mx-0 xl:grid-cols-3">
           {products.map((product) => {
             const price = product?.prices?.find(
               (price) => price.interval === billingInterval
@@ -171,36 +171,43 @@ export default function Pricing({ user, products, subscription }: Props) {
               <div
                 key={product.id}
                 className={cn(
-                  'flex flex-col rounded-lg shadow-sm divide-y divide-blue-200 bg-white',
+                  'flex flex-col rounded-lg shadow-lg overflow-hidden',
                   {
-                    'border-2 border-blue-500': subscription
+                    'border-4 border-blue-500 ring-2 ring-blue-500 ring-opacity-50': subscription
                       ? product.name === subscription?.prices?.products?.name
-                      : product.name === 'Freelancer'
-                  },
-                  'flex-1',
-                  'basis-1/3',
-                  'max-w-xs'
+                      : product.name === 'Freelancer',
+                    'border-2 border-blue-200': !(subscription
+                      ? product.name === subscription?.prices?.products?.name
+                      : product.name === 'Freelancer')
+                  }
                 )}
               >
-                <div className="p-6">
-                  <h2 className="text-2xl font-semibold leading-6 text-blue-900">
+                <div className="px-6 py-8 bg-white sm:p-10 sm:pb-6">
+                  <h3
+                    className="inline-flex px-4 py-1 rounded-full text-sm font-semibold tracking-wide uppercase bg-blue-100 text-blue-600"
+                    id="tier-standard"
+                  >
                     {product.name}
-                  </h2>
-                  <p className="mt-4 text-blue-700">{product.description}</p>
-                  <p className="mt-8">
-                    <span className="text-5xl font-extrabold text-blue-900">
-                      {priceString}
-                    </span>
-                    <span className="text-base font-medium text-blue-700">
+                  </h3>
+                  <div className="mt-4 flex items-baseline text-6xl font-extrabold">
+                    {priceString}
+                    <span className="ml-1 text-2xl font-medium text-gray-500">
                       /{billingInterval}
                     </span>
-                  </p>
+                  </div>
+                  <p className="mt-5 text-lg text-gray-500">{product.description}</p>
+                </div>
+                <div className="flex-1 flex flex-col justify-between px-6 pt-6 pb-8 bg-gray-50 space-y-6 sm:p-10 sm:pt-6">
+                  <ul className="space-y-4">
+                    {/* Add feature list items here if needed */}
+                  </ul>
                   <Button
                     variant="slim"
                     type="button"
+                    disabled={!user}
                     loading={priceIdLoading === price.id}
                     onClick={() => handleStripeCheckout(price)}
-                    className="block w-full py-2 mt-8 text-sm font-semibold text-center text-white bg-blue-600 rounded-md hover:bg-blue-700"
+                    className="w-full py-3 text-base font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md shadow-sm"
                   >
                     {subscription ? 'Manage' : 'Subscribe'}
                   </Button>
