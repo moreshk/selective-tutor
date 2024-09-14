@@ -139,7 +139,7 @@ export default function Pricing({ user, products, subscription }: Props) {
           <h1 className="text-4xl font-extrabold text-blue-900 sm:text-center sm:text-6xl">
             Pricing Plans
           </h1>
-          <div className="relative self-center mt-6 bg-blue-100 rounded-lg p-0.5 flex sm:mt-8 border border-blue-200">
+          {/* <div className="relative self-center mt-6 bg-blue-100 rounded-lg p-0.5 flex sm:mt-8 border border-blue-200">
             {intervals.map((interval) => (
               <button
                 key={interval}
@@ -154,7 +154,7 @@ export default function Pricing({ user, products, subscription }: Props) {
                 {formatInterval(interval)} billing
               </button>
             ))}
-          </div>
+          </div> */}
         </div>
         <div className="mt-12 space-y-4 sm:mt-16 sm:space-y-0 sm:grid sm:grid-cols-2 sm:gap-6 lg:max-w-4xl lg:mx-auto xl:max-w-none xl:mx-0 xl:grid-cols-3">
           {products.map((product) => {
