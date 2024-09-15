@@ -21,15 +21,21 @@ export default function AdminSections() {
 
   async function checkAdminStatus() {
     const { data: { user } } = await supabase.auth.getUser();
+    console.log('Current user:', user); // Debug log
     if (user) {
       const { data, error } = await supabase
         .from('users')
         .select('is_admin')
         .eq('id', user.id)
         .single();
-        if (data && 'is_admin' in data) {
-            setIsAdmin(data.is_admin as boolean);
-          }
+      console.log('User data:', data, 'Error:', error); // Debug log
+      if (data && 'is_admin' in data) {
+        setIsAdmin(data.is_admin as boolean);
+      } else {
+        console.error('is_admin not found in user data');
+      }
+    } else {
+      console.error('No user found');
     }
   }
 
