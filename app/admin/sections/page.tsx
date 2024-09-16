@@ -57,14 +57,33 @@ export default function AdminSections() {
   }
 
   async function uploadImageToAzure(file: File): Promise<string> {
-    const blobServiceClient = new BlobServiceClient(process.env.NEXT_PUBLIC_AZURE_STORAGE_CONNECTION_STRING!);
-    const containerClient = blobServiceClient.getContainerClient(process.env.NEXT_PUBLIC_AZURE_STORAGE_CONTAINER_NAME!);
-    const blobName = `section-images/${Date.now()}-${file.name}`;
-    const blockBlobClient = containerClient.getBlockBlobClient(blobName);
-    
-    await blockBlobClient.uploadData(file);
-    return blockBlobClient.url;
+    try {
+      const connectionString = process.env.NEXT_PUBLIC_AZURE_STORAGE_CONNECTION_STRING;
+      const containerName = process.env.NEXT_PUBLIC_AZURE_STORAGE_CONTAINER_NAME;
+  
+      if (!connectionString) {
+        throw new Error('Azure Storage connection string is not defined');
+      }
+      if (!containerName) {
+        throw new Error('Azure Storage container name is not defined');
+      }
+  
+      console.log('Connection string:', connectionString); // Remove this in production
+      console.log('Container name:', containerName);
+  
+      const blobServiceClient = new BlobServiceClient(connectionString);
+      const containerClient = blobServiceClient.getContainerClient(containerName);
+      const blobName = `section-images/${Date.now()}-${file.name}`;
+      const blockBlobClient = containerClient.getBlockBlobClient(blobName);
+      
+      await blockBlobClient.uploadData(file);
+      return blockBlobClient.url;
+    } catch (error) {
+      console.error('Error uploading image to Azure:', error);
+      throw error;
+    }
   }
+  
 
   async function createSection() {
     if (!newSection.title || isNaN(newSection.order_index)) {
@@ -74,7 +93,13 @@ export default function AdminSections() {
   
     let imageUrl = '';
     if (imageFile) {
-      imageUrl = await uploadImageToAzure(imageFile);
+      try {
+        imageUrl = await uploadImageToAzure(imageFile);
+      } catch (error) {
+        console.error('Failed to upload image:', error);
+        // Handle the error appropriately (e.g., show an error message to the user)
+        return;
+      }
     }
   
     const { data, error } = await supabase
