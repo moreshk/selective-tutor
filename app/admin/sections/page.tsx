@@ -52,15 +52,22 @@ export default function AdminSections() {
   }
 
   async function createSection() {
+    if (!newSection.title || isNaN(newSection.order_index)) {
+      console.error('Invalid section data');
+      return;
+    }
+  
     const { data, error } = await supabase
       .from('sections')
       .insert([newSection])
       .select();
-    if (data) {
+    
+    if (error) {
+      console.error('Error creating section:', error);
+      // Handle the error (e.g., show an error message to the user)
+    } else if (data) {
       setSections([...sections, data[0]]);
       setNewSection({ title: '', description: '', order_index: 0 });
-    } else if (error) {
-      console.error('Error creating section:', error);
     }
   }
 
@@ -117,12 +124,12 @@ export default function AdminSections() {
           className="w-full p-2 mb-2 border rounded"
         />
         <input
-          type="number"
-          placeholder="Order Index"
-          value={newSection.order_index}
-          onChange={(e) => setNewSection({...newSection, order_index: parseInt(e.target.value)})}
-          className="w-full p-2 mb-2 border rounded"
-        />
+  type="number"
+  placeholder="Order Index"
+  value={newSection.order_index || ''}
+  onChange={(e) => setNewSection({...newSection, order_index: e.target.value ? parseInt(e.target.value) : 0})}
+  className="w-full p-2 mb-2 border rounded"
+/>
         <button onClick={createSection} className="bg-blue-500 text-white p-2 rounded">Create Section</button>
       </div>
 

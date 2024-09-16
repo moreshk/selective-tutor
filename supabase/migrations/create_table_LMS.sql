@@ -80,3 +80,40 @@ CREATE POLICY "Allow users to read their own responses" ON user_responses FOR SE
 
 -- Add is_admin column to the users table
 ALTER TABLE auth.users ADD COLUMN is_admin BOOLEAN DEFAULT false;
+
+ALTER TABLE public.users ADD COLUMN is_admin BOOLEAN DEFAULT false;
+
+ALTER TABLE public.users ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Users can view own data" ON public.users
+  FOR SELECT USING (auth.uid() = id);
+
+CREATE POLICY "Only admins can update is_admin status" ON public.users
+  FOR UPDATE USING (auth.uid() IN (SELECT id FROM public.users WHERE is_admin = true))
+  WITH CHECK (auth.uid() IN (SELECT id FROM public.users WHERE is_admin = true));
+
+-- Drop the existing policy
+DROP POLICY IF EXISTS "Allow write access for admin users" ON sections;
+
+-- Create the updated policy
+CREATE POLICY "Allow write access for admin users" ON sections
+  FOR ALL USING (
+    auth.role() = 'authenticated' AND 
+    EXISTS (
+      SELECT 1 FROM public.users
+      WHERE public.users.id = auth.uid() AND public.users.is_admin = true
+    )
+  );
+
+-- Drop existing policy if it exists
+DROP POLICY IF EXISTS "Allow write access for admin users" ON lessons;
+
+-- Create updated policy for lessons table
+CREATE POLICY "Allow write access for admin users" ON lessons
+  FOR ALL USING (
+    auth.role() = 'authenticated' AND 
+    EXISTS (
+      SELECT 1 FROM public.users
+      WHERE public.users.id = auth.uid() AND public.users.is_admin = true
+    )
+  );
