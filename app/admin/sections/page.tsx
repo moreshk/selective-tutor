@@ -2,8 +2,12 @@
 import { useState, useEffect } from 'react';
 import { createClient } from '@/utils/supabase/client';
 import { Database } from '@/types_db';
+import { BlobServiceClient } from '@azure/storage-blob';
 
-type Section = Database['public']['Tables']['sections']['Row'];
+// type Section = Database['public']['Tables']['sections']['Row'];
+
+type Section = Database['public']['Tables']['sections']['Row'] & { image_url?: string };
+
 
 
 export default function AdminSections() {
@@ -11,6 +15,7 @@ export default function AdminSections() {
   const [newSection, setNewSection] = useState({ title: '', description: '', order_index: 0 });
   const [editingSection, setEditingSection] = useState<Section | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [imageFile, setImageFile] = useState<File | null>(null);
 
   const supabase = createClient();
 
@@ -51,36 +56,59 @@ export default function AdminSections() {
     }
   }
 
+  async function uploadImageToAzure(file: File): Promise<string> {
+    const blobServiceClient = new BlobServiceClient(process.env.NEXT_PUBLIC_AZURE_STORAGE_CONNECTION_STRING!);
+    const containerClient = blobServiceClient.getContainerClient(process.env.NEXT_PUBLIC_AZURE_STORAGE_CONTAINER_NAME!);
+    const blobName = `section-images/${Date.now()}-${file.name}`;
+    const blockBlobClient = containerClient.getBlockBlobClient(blobName);
+    
+    await blockBlobClient.uploadData(file);
+    return blockBlobClient.url;
+  }
+
   async function createSection() {
     if (!newSection.title || isNaN(newSection.order_index)) {
       console.error('Invalid section data');
       return;
     }
   
+    let imageUrl = '';
+    if (imageFile) {
+      imageUrl = await uploadImageToAzure(imageFile);
+    }
+  
     const { data, error } = await supabase
       .from('sections')
-      .insert([newSection])
+      .insert([{ ...newSection, image_url: imageUrl }])
       .select();
     
     if (error) {
       console.error('Error creating section:', error);
-      // Handle the error (e.g., show an error message to the user)
     } else if (data) {
       setSections([...sections, data[0]]);
       setNewSection({ title: '', description: '', order_index: 0 });
+      setImageFile(null);
     }
   }
 
   async function updateSection() {
     if (!editingSection) return;
+
+    let imageUrl = editingSection.image_url;
+    if (imageFile) {
+      imageUrl = await uploadImageToAzure(imageFile);
+    }
+
     const { data, error } = await supabase
       .from('sections')
-      .update(editingSection)
+      .update({ ...editingSection, image_url: imageUrl })
       .eq('id', editingSection.id)
       .select();
+
     if (data) {
       setSections(sections.map(s => s.id === editingSection.id ? data[0] : s));
       setEditingSection(null);
+      setImageFile(null);
     } else if (error) {
       console.error('Error updating section:', error);
     }
@@ -130,6 +158,12 @@ export default function AdminSections() {
   onChange={(e) => setNewSection({...newSection, order_index: e.target.value ? parseInt(e.target.value) : 0})}
   className="w-full p-2 mb-2 border rounded"
 />
+<input
+          type="file"
+          accept="image/*"
+          onChange={(e) => setImageFile(e.target.files?.[0] || null)}
+          className="w-full p-2 mb-2 border rounded"
+        />
         <button onClick={createSection} className="bg-blue-500 text-white p-2 rounded">Create Section</button>
       </div>
 
@@ -158,6 +192,12 @@ export default function AdminSections() {
                   onChange={(e) => setEditingSection({...editingSection, order_index: parseInt(e.target.value)})}
                   className="w-full p-2 mb-2 border rounded"
                 />
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => setImageFile(e.target.files?.[0] || null)}
+                  className="w-full p-2 mb-2 border rounded"
+                />
                 <button onClick={updateSection} className="bg-green-500 text-white p-2 rounded mr-2">Save</button>
                 <button onClick={() => setEditingSection(null)} className="bg-gray-500 text-white p-2 rounded">Cancel</button>
               </>
@@ -166,6 +206,9 @@ export default function AdminSections() {
                 <h3 className="text-lg font-semibold">{section.title}</h3>
                 <p>{section.description}</p>
                 <p>Order: {section.order_index}</p>
+                {section.image_url && (
+                  <img src={section.image_url} alt={section.title} className="mt-2 max-w-full h-auto" />
+                )}
                 <button onClick={() => setEditingSection(section)} className="bg-yellow-500 text-white p-2 rounded mr-2 mt-2">Edit</button>
                 <button onClick={() => deleteSection(section.id)} className="bg-red-500 text-white p-2 rounded mt-2">Delete</button>
               </>

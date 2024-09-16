@@ -63,3 +63,6 @@ BEGIN
   END IF;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Add image_url column to sections table
+ALTER TABLE sections ADD COLUMN image_url TEXT;
