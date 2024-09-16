@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { createClient } from '@/utils/supabase/client';
 import { Database } from '@/types_db';
-import { BlobServiceClient } from '@azure/storage-blob';
+import { BlobServiceClient, StorageSharedKeyCredential } from '@azure/storage-blob';
 
 // type Section = Database['public']['Tables']['sections']['Row'];
 
@@ -71,7 +71,24 @@ export default function AdminSections() {
       console.log('Connection string:', connectionString); // Remove this in production
       console.log('Container name:', containerName);
   
-      const blobServiceClient = new BlobServiceClient(connectionString);
+      // Parse the connection string
+      const parts = connectionString.split(';');
+      const accountName = parts.find(part => part.startsWith('AccountName='))?.split('=')[1];
+      const accountKey = parts.find(part => part.startsWith('AccountKey='))?.split('=')[1];
+  
+      if (!accountName || !accountKey) {
+        throw new Error('Unable to parse account name or key from connection string');
+      }
+  
+      // Create a StorageSharedKeyCredential
+      const sharedKeyCredential = new StorageSharedKeyCredential(accountName, accountKey);
+  
+      // Create the BlobServiceClient using the account name and shared key credential
+      const blobServiceClient = new BlobServiceClient(
+        `https://${accountName}.blob.core.windows.net`,
+        sharedKeyCredential
+      );
+  
       const containerClient = blobServiceClient.getContainerClient(containerName);
       const blobName = `section-images/${Date.now()}-${file.name}`;
       const blockBlobClient = containerClient.getBlockBlobClient(blobName);
@@ -83,7 +100,6 @@ export default function AdminSections() {
       throw error;
     }
   }
-  
 
   async function createSection() {
     if (!newSection.title || isNaN(newSection.order_index)) {
