@@ -58,43 +58,21 @@ export default function AdminSections() {
 
   async function uploadImageToAzure(file: File): Promise<string> {
     try {
-      const connectionString = process.env.NEXT_PUBLIC_AZURE_STORAGE_CONNECTION_STRING;
-      const containerName = process.env.NEXT_PUBLIC_AZURE_STORAGE_CONTAINER_NAME;
+      const formData = new FormData();
+      formData.append('file', file);
   
-      if (!connectionString) {
-        throw new Error('Azure Storage connection string is not defined');
-      }
-      if (!containerName) {
-        throw new Error('Azure Storage container name is not defined');
-      }
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
   
-      console.log('Connection string:', connectionString); // Remove this in production
-      console.log('Container name:', containerName);
-  
-      // Parse the connection string
-      const parts = connectionString.split(';');
-      const accountName = parts.find(part => part.startsWith('AccountName='))?.split('=')[1];
-      const accountKey = parts.find(part => part.startsWith('AccountKey='))?.split('=')[1];
-  
-      if (!accountName || !accountKey) {
-        throw new Error('Unable to parse account name or key from connection string');
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to upload image');
       }
   
-      // Create a StorageSharedKeyCredential
-      const sharedKeyCredential = new StorageSharedKeyCredential(accountName, accountKey);
-  
-      // Create the BlobServiceClient using the account name and shared key credential
-      const blobServiceClient = new BlobServiceClient(
-        `https://${accountName}.blob.core.windows.net`,
-        sharedKeyCredential
-      );
-  
-      const containerClient = blobServiceClient.getContainerClient(containerName);
-      const blobName = `section-images/${Date.now()}-${file.name}`;
-      const blockBlobClient = containerClient.getBlockBlobClient(blobName);
-      
-      await blockBlobClient.uploadData(file);
-      return blockBlobClient.url;
+      const data = await response.json();
+      return data.filePath;
     } catch (error) {
       console.error('Error uploading image to Azure:', error);
       throw error;
